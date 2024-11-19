@@ -36,7 +36,7 @@ export default function User2Register(){
     ;
 
     return (
-        <div className="User1List">
+        <div className="User2List">
             <span>User2  등록</span>
             <form onSubmit={submitHandler}>
                 <table border={1}>
