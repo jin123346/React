@@ -1,18 +1,55 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { postUserLogin } from '../../api/UserAPI';
+import {useDispatch} from "react-redux";
+import { login } from '../../slice/userSlice';
+
+const initState={
+    uid: "",
+    pass: ""
+   
+};
+
 export default function Login(){
+
+    const [user, setUser] = useState({ ...initState });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const changeHandler = (e) => {
+    e.preventDefault();
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    // 로그인
+    const tokens = await postUserLogin(user);
+    console.log("tokens : " + JSON.stringify(tokens));
+
+    if (tokens) {
+      // 리덕스 reducer(login) 호출
+      dispatch(login(tokens));
+      // 메인 전환
+      navigate("/");
+    } else {
+      alert("로그인 실패했습니다. 아이디, 비번 다시 확인 하세요.");
+    }
+  };
 
     return <>
     
              <section className="login">
-                    <form action="#">                    
+                    <form onSubmit={submitHandler}>                    
                         <table border="0">
                             <tr>
                                 <td><img src="/images/user/login_ico_id.png" alt="아이디"/></td>
-                                <td><input type="text" name="uid" placeholder="아이디 입력"/></td>
+                                <td><input type="text" name="uid" placeholder="아이디 입력" value={user.uid} onChange={changeHandler}/></td>
                             </tr>
                             <tr>
                                 <td><img src="/images/user/login_ico_pw.png" alt="비밀번호"/></td>
-                                <td><input type="password" name="pass" placeholder="비밀번호 입력"/></td>
+                                <td><input type="password" name="pass" placeholder="비밀번호 입력" value={user.name} onChange={changeHandler}/></td>
                             </tr>
                         </table>
                         <input type="submit" value="로그인" className="btnLogin"/>

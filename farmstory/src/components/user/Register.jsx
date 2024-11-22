@@ -1,22 +1,64 @@
+import { useState } from "react";
+import { postUser } from "../../api/UserAPI";
+import { useNavigate } from "react-router-dom";
+
+const initState={
+    uid: "",
+    pass: "",
+    name: "",
+    nick: "",
+    email: "",
+    hp: "",
+    zip: "",
+    addr1: "",
+    addr2: "",
+};
+
 export default function Register(){
+
+    const [user, setUser] =useState({...initState});
+    const navigate = useNavigate();
+
+    const changeHandler = (e) => {
+        e.preventDefault();
+
+        setUser({...user,[e.target.name]:e.target.value})
+    }
+
+    const submitHandler = (e) => {
+        e.preventDefault();
+
+       const savedUser = postUser(user);
+
+       console.log(savedUser);
+
+       if(savedUser != null){
+        alert('회원가입이 완료되었습니다.')
+        navigate("/user/login");
+       }else{
+        alert('회원가입에 실패했습니다.')
+       }
+    }
+    
+ 
 
     return <>
     
     <section className="register">
-                <form action="#">
+                <form onSubmit={submitHandler}>
                     <h2 className="tit">사이트 이용정보 입력</h2>
                     <table border="1">                        
                         <tr>
                             <td>아이디</td>
                             <td>
-                                <input type="text" name="uid" placeholder="아이디 입력"/>
+                                <input type="text" name="uid" placeholder="아이디 입력" value={user.uid} onChange={changeHandler}/>
                                 <button type="button"><img src="/images/user/chk_id.gif" alt="중복확인"/></button>
                                 <span className="uidResult"></span>
                             </td>
                         </tr>
                         <tr>
                             <td>비밀번호</td>
-                            <td><input type="password" name="pass1" placeholder="비밀번호 입력"/></td>
+                            <td><input type="password" name="pass" placeholder="비밀번호 입력"  value={user.pass} onChange={changeHandler}/></td>
                         </tr>
                         <tr>
                             <td>비밀번호 확인</td>
@@ -29,14 +71,14 @@ export default function Register(){
                         <tr>
                             <td>이름</td>
                             <td>
-                                <input type="text" name="name" placeholder="이름 입력"/>                        
+                                <input type="text" name="name" placeholder="이름 입력" value={user.name} onChange={changeHandler}/>                        
                             </td>
                         </tr>
                         <tr>
                             <td>별명</td>
                             <td>
                                 <p className="nickInfo">공백없는 한글, 영문, 숫자 입력</p>
-                                <input type="text" name="nick" placeholder="별명 입력"/>
+                                <input type="text" name="nick" placeholder="별명 입력" value={user.nick} onChange={changeHandler}/>
                                 <button type="button"><img src="/images/user/chk_id.gif" alt="중복확인"/></button>
                                 <span className="nickResult"></span>
                             </td>
@@ -44,7 +86,7 @@ export default function Register(){
                         <tr>
                             <td>이메일</td>
                             <td>
-                                <input type="email" name="email" placeholder="이메일 입력"/>
+                                <input type="email" name="email" placeholder="이메일 입력" value={user.email} onChange={changeHandler}/>
                                 <button type="button"><img src="/images/user/chk_auth.gif" alt="인증번호 받기"/></button>
                                 <div className="auth">
                                     <input type="text" name="auth" placeholder="인증번호 입력"/>
@@ -54,15 +96,16 @@ export default function Register(){
                         </tr>
                         <tr>
                             <td>휴대폰</td>
-                            <td><input type="text" name="hp" placeholder="휴대폰 입력"/></td>
+                            <td><input type="text" name="hp" placeholder="휴대폰 입력" value={user.hp} onChange={changeHandler}/></td>
                         </tr>
                         <tr>
                             <td>주소</td>
                             <td>
-                                <input type="text" name="zip" placeholder="우편번호"/>
-                                <button type="button"><img src="/images/user/chk_post.gif" alt="우편번호찾기"/></button>
-                                <input type="text" name="addr1" placeholder="주소 검색"/>
-                                <input type="text" name="addr2" placeholder="상세주소 입력"/>
+                                <input type="text" name="zip" placeholder="우편번호" value={user.zip} onChange={changeHandler}/>
+                                <button type="button"><img src="/images/user
+                                /chk_post.gif" alt="우편번호찾기"/></button>
+                                <input type="text" name="addr1" placeholder="주소 검색" value={user.addr1} onChange={changeHandler}/>
+                                <input type="text" name="addr2" placeholder="상세주소 입력" value={user.addr2} onChange={changeHandler}/>
                             </td>
                         </tr>
                     </table>

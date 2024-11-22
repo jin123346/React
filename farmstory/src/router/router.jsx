@@ -14,6 +14,9 @@ const BoardListPage = lazy(() => import("../../pages/board/ListPage"));
 const BoardWritePage = lazy(() => import("../../pages/board/WritePage"));
 const BoardViewPage = lazy(() => import("../../pages/board/ViewPage"));
 const BoardModifyPage = lazy(() => import("../../pages/board/ModifyPage"));
+const AdminMainPage =lazy(() => import("../../pages/admin/MainPage"));
+const AdminProductRegisterPage =lazy(() => import("../../pages/admin/RegisterPage"));
+const AdminProductListPage =lazy(() => import("../../pages/admin/ListPage"));
 
 const router = createBrowserRouter([
     { path:"/", element: <MainPage />},
@@ -28,8 +31,9 @@ const router = createBrowserRouter([
     { path:"/user/login",element: <LoginPage />},
     { path:"/user/terms",element: <TermsPage />},
     { path:"/user/register",element: <RegisterPage />},
-    { path:"/admin/product/register",element: null},
-    { path:"/admin/product/list",element: null},
+    { path:"/admin",element: <Suspense><AdminMainPage /></Suspense>},
+    { path:"/admin/product/register",element: <Suspense><AdminProductRegisterPage /></Suspense>},
+    { path:"/admin/product/list",element: <Suspense><AdminProductListPage /></Suspense>},
 ]);
 
 export default router;
